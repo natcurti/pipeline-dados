@@ -2,39 +2,35 @@ import json, csv
 
 class Data:
 
-    def __init__(self, path, data_type):
-        self.path = path
-        self.data_type = data_type
-        self.data = self.load_data()
-        self.columns = self.get_column_names()
+    def __init__(self, data):
+        self.data = data
+        self.columns = self.__get_column_names()
         self.data_len = len(self.data)
 
-    def load_json(self):
+    def __load_json(path):
         json_empresa_A = []
-        with open(self.path) as file:
+        with open(path) as file:
             json_empresa_A = json.load(file)
         return json_empresa_A
 
-    def load_csv(self):
+    def __load_csv(path):
         csv_data = []
-        with open(self.path) as file_csv: 
+        with open(path) as file_csv: 
             spamreader = csv.DictReader(file_csv)
             for row in spamreader:
                 csv_data.append(row)
         return csv_data
 
-    def load_data(self):
+    @classmethod
+    def load_data(cls, path, data_type):
         data = []
-        if self.data_type == 'json':
-            data = self.load_json()
-        elif self.data_type == 'csv':
-            data = self.load_csv()
-        elif self.data_type == 'list':
-            data = self.path
-            self.path = 'Lista em memória'
-        return data
+        if data_type == 'json':
+            data = cls.__load_json(path)
+        elif data_type == 'csv':
+            data = cls.__load_csv(path)
+        return cls(data)
         
-    def get_column_names(self):
+    def __get_column_names(self):
         return list(self.data[0].keys())
 
     def update_column_names(self, mapping):
@@ -50,9 +46,9 @@ class Data:
         combined_list = []
         combined_list.extend(first_source.data)
         combined_list.extend(second_source.data)
-        return Data(combined_list, 'list')
+        return Data(combined_list)
 
-    def transform_data_to_table(self):
+    def __transform_data_to_table(self):
         data_table = [self.columns]
 
         for row in self.data: 
@@ -65,7 +61,7 @@ class Data:
 
     def save_data(self, path):
         
-        data_table = self.transform_data_to_table()
+        data_table = self.__transform_data_to_table()
 
         with open(path, 'w') as file:
             writer = csv.writer(file)

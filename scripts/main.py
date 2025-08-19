@@ -12,11 +12,11 @@ key_mapping = {
     'Data da Venda': 'Data da Venda'
 }
 
-dados_csv = Data(path_csv, 'csv')
+dados_csv = Data.load_data(path_csv, 'csv')
 dados_csv.update_column_names(key_mapping)
 print(dados_csv.data_len)
 
-dados_json = Data(path_json, 'json')
+dados_json = Data.load_data(path_json, 'json')
 print(dados_json.data_len)
 
 dados_combinados = Data.combine_sources(dados_csv, dados_json)
