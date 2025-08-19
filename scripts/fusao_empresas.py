@@ -1,5 +1,6 @@
 import json
 import csv
+from data import Data
 
 path_json = 'data_raw/dados_empresaA.json'
 path_csv = 'data_raw/dados_empresaB.csv'
@@ -112,4 +113,5 @@ save_data(path_to_save, data_table)
 #print(f"Nome das colunas CSV: {columns_csv}")
 #print(f"Colunas CSV atualizadas: {new_data_csv[0]}")
 #print(f"Lista combinada: {data_table[1]}")
+
 
