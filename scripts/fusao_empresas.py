@@ -58,6 +58,22 @@ def validate_columns_data(combined_list, second_source):
         return True
     else:
         return False
+    
+def transform_data_to_table(list, column_names):
+    data_table = [column_names]
+
+    for row in list: 
+        new_row = []
+        for col in column_names:
+            new_row.append(row.get(col, 'Indisponível'))
+        data_table.append(new_row)   
+    
+    return data_table
+
+def save_data(path, data):
+    with open(path, 'w') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
 
 # Carregamento dos dados: 
 
@@ -80,12 +96,20 @@ columns_csv = get_column_names(data_csv)
 
 new_data_csv = update_column_names(data_csv, key_mapping)
 
-combined_list = combine_sources(data_json, new_data_csv)
+combined_list = combine_sources(new_data_csv, data_json)
+
+name_columns = get_column_names(combined_list)
+
+data_table = transform_data_to_table(combined_list, name_columns)
+
+path_to_save = 'data_processed/dados_combinados_script.csv'
+
+save_data(path_to_save, data_table)
 
 # Resultados:
 
-print(f"Nome das colunas JSON: {columns_json}")
-print(f"Nome das colunas CSV: {columns_csv}")
-print(f"Colunas CSV atualizadas: {new_data_csv[0]}")
-
+#print(f"Nome das colunas JSON: {columns_json}")
+#print(f"Nome das colunas CSV: {columns_csv}")
+#print(f"Colunas CSV atualizadas: {new_data_csv[0]}")
+#print(f"Lista combinada: {data_table[1]}")
 
